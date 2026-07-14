@@ -3,6 +3,8 @@ name: Build & Release
 on:
   push:
     branches: [master]
+  tags:
+    - "v*"
   pull_request:
     branches: [master]
 
@@ -10,6 +12,8 @@ jobs:
   build-android:
     name: Build Android APK
     runs-on: macos-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v7
@@ -34,3 +38,8 @@ jobs:
         with:
           name: android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: build/app/outputs/flutter-apk/app-release.apk
